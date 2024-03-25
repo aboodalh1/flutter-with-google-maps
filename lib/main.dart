@@ -1,5 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() {
@@ -8,7 +8,6 @@ void main() {
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -22,6 +21,13 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    googleMapController.dispose();
+    super.dispose();
+  }
+
+  late GoogleMapController googleMapController;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,16 +48,28 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Stack(children: [
           GoogleMap(
+              onMapCreated: (controller) {
+                googleMapController = controller;
+              },
               cameraTargetBounds: CameraTargetBounds(LatLngBounds(
-                  northeast: const LatLng(31.187084851056554, 29.928110526889437),
-                  southwest: const LatLng(31.187084851056554, 29.928110526889437))),
-              initialCameraPosition: const CameraPosition(target: LatLng(0, 0))),
+                  northeast:
+                      const LatLng(31.187084851056554, 29.928110526889437),
+                  southwest:
+                      const LatLng(31.187084851056554, 29.928110526889437))),
+              initialCameraPosition:
+                  const CameraPosition(target: LatLng(0, 0))),
           Positioned(
               bottom: 16,
               left: 16,
               right: 16,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  CameraPosition newLocation = CameraPosition(
+                      target: LatLng(30.623356317604505, 30.1907021087604),
+                      zoom: 12);
+                  googleMapController.animateCamera(
+                      CameraUpdate.newCameraPosition(newLocation));
+                },
                 child: const Text("Change location"),
               )),
         ]),
@@ -62,221 +80,6 @@ class _MyAppState extends State<MyApp> {
 
 // world view 0->3
 // country view 4->6
-//city view 10->12
+// city view 10->12
 // street view 13->17
 // building view 18->20
-// class pointsCounter extends StatefulWidget {
-//   @override
-//   State<pointsCounter> createState() => _pointsCounterState();
-// }
-
-// class _pointsCounterState extends State<pointsCounter> {
-//   int teamAPoints = 0;
-
-//   int teamBPoints = 0;
-
-//   void addOnePoint() {
-//     print('add one point');
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: Scaffold(
-//         appBar: AppBar(
-//           backgroundColor: Colors.orange,
-//           title: const Text('Points Counter'),
-//         ),
-//         body: Column(
-//           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//           children: [
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               children: [
-//                 Container(
-//                   height: 500,
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                     children: [
-//                       const Text(
-//                         'Team E',
-//                         style: TextStyle(
-//                           fontSize: 32,
-//                         ),
-//                       ),
-//                       Text(
-//                         '$teamAPoints',
-//                         style: const TextStyle(
-//                           fontSize: 150,
-//                         ),
-//                       ),
-//                       ElevatedButton(
-//                         style: ElevatedButton.styleFrom(
-//                           padding: const EdgeInsets.all(8),
-//                           backgroundColor: Colors.orange,
-//                           minimumSize: const Size(150, 50),
-//                         ),
-//                         onPressed: () {
-//                           setState(() {
-//                             teamAPoints++;
-//                           });
-//                           print(teamAPoints);
-//                         },
-//                         child: const Text(
-//                           'Add 1 Point ',
-//                           style: TextStyle(
-//                             fontSize: 18,
-//                             color: Colors.black,
-//                           ),
-//                         ),
-//                       ),
-//                       ElevatedButton(
-//                         style: ElevatedButton.styleFrom(
-//                           backgroundColor: Colors.orange,
-//                           minimumSize: const Size(150, 50),
-//                         ),
-//                         onPressed: () {
-//                           setState(() {
-//                             teamAPoints += 2;
-//                           });
-//                         },
-//                         child: const Text(
-//                           'Add 2 Point',
-//                           style: TextStyle(
-//                             fontSize: 18,
-//                             color: Colors.black,
-//                           ),
-//                         ),
-//                       ),
-//                       ElevatedButton(
-//                         style: ElevatedButton.styleFrom(
-//                           primary: Colors.orange,
-//                           minimumSize: const Size(150, 50),
-//                         ),
-//                         onPressed: () {
-//                           setState(() {
-//                             teamAPoints += 3;
-//                           });
-//                         },
-//                         child: const Text(
-//                           'Add 3 Point ',
-//                           style: TextStyle(
-//                             fontSize: 18,
-//                             color: Colors.black,
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 Container(
-//                   height: 500,
-//                   child: const VerticalDivider(
-//                     indent: 50,
-//                     endIndent: 50,
-//                     color: Colors.grey,
-//                     thickness: 1,
-//                   ),
-//                 ),
-//                 Container(
-//                   height: 500,
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                     children: [
-//                       const Text(
-//                         'Team B',
-//                         style: TextStyle(
-//                           fontSize: 32,
-//                         ),
-//                       ),
-//                       Text(
-//                         '$teamBPoints',
-//                         style: const TextStyle(
-//                           fontSize: 150,
-//                         ),
-//                       ),
-//                       ElevatedButton(
-//                         style: ElevatedButton.styleFrom(
-//                           padding: const EdgeInsets.all(8),
-//                           primary: Colors.orange,
-//                           minimumSize: const Size(150, 50),
-//                         ),
-//                         onPressed: () {
-//                           setState(() {});
-//                           teamBPoints++;
-//                         },
-//                         child: const Text(
-//                           'Add 1 Point ',
-//                           style: TextStyle(
-//                             fontSize: 18,
-//                             color: Colors.black,
-//                           ),
-//                         ),
-//                       ),
-//                       ElevatedButton(
-//                         style: ElevatedButton.styleFrom(
-//                           primary: Colors.orange,
-//                           minimumSize: const Size(150, 50),
-//                         ),
-//                         onPressed: () {
-//                           setState(() {});
-//                           teamBPoints += 2;
-//                         },
-//                         child: const Text(
-//                           'Add 2 Point ',
-//                           style: TextStyle(
-//                             fontSize: 18,
-//                             color: Colors.black,
-//                           ),
-//                         ),
-//                       ),
-//                       ElevatedButton(
-//                         style: ElevatedButton.styleFrom(
-//                           primary: Colors.orange,
-//                           minimumSize: const Size(150, 50),
-//                         ),
-//                         onPressed: () {
-//                           setState(() {
-//                             teamBPoints += 3;
-//                           });
-//                         },
-//                         child: const Text(
-//                           'Add 3 Point ',
-//                           style: TextStyle(
-//                             fontSize: 18,
-//                             color: Colors.black,
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//             ElevatedButton(
-//               style: ElevatedButton.styleFrom(
-//                 padding: const EdgeInsets.all(8),
-//                 primary: Colors.orange,
-//                 minimumSize: const Size(150, 50),
-//               ),
-//               onPressed: () {
-//                 setState(() {
-//                   teamAPoints = 0;
-//                   teamBPoints = 0;
-//                 });
-//               },
-//               child: const Text(
-//                 'Reset',
-//                 style: TextStyle(
-//                   fontSize: 18,
-//                   color: Colors.black,
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
